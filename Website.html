@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SIM — Security Incident Mapping System</title>
+<meta name="description" content="SIM is a campus Security Incident Mapping System for students, staff, and landlords to report and monitor safety incidents."/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+<style>
+:root{--blue:#2563EB;--blue-dark:#1d4ed8;--blue-light:#3b82f6;--black:#0b0b0f;--ink:#111827;--muted:#6b7280;--line:#e5e7eb;--bg:#f7f8fb;--card:#ffffff;--shadow:0 10px 30px rgba(17,24,39,.06),0 2px 6px rgba(17,24,39,.04);--radius:14px;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.container{width:min(1160px,92%);margin-inline:auto}
+.nav{position:sticky;top:0;z-index:50;background:rgba(11,11,15,.92);backdrop-filter:saturate(140%) blur(10px);color:#fff;border-bottom:1px solid rgba(255,255,255,.06);}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.3px;cursor:pointer}
+.brand-badge{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,var(--blue),var(--blue-light));box-shadow:0 6px 18px rgba(37,99,235,.45);}
+.brand-badge i{color:#fff}
+.brand-name{font-size:1.05rem}
+.brand-name span{color:var(--blue-light)}
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav-links a{padding:9px 14px;border-radius:10px;font-size:.94rem;color:#dbe0ea;transition:.2s ease;cursor:pointer}
+.nav-links a:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav-links a.active{background:var(--blue);color:#fff}
+.nav-cta{margin-left:8px}
+.hamburger{display:none;background:transparent;border:0;color:#fff;font-size:1.4rem;cursor:pointer;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:12px;font-weight:600;font-size:.95rem;border:1px solid transparent;cursor:pointer;transition:.2s ease;}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 8px 20px rgba(37,99,235,.35)}
+.btn-primary:hover{background:var(--blue-dark);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.25)}
+.btn-ghost:hover{background:rgba(255,255,255,.08)}
+.btn-dark{background:var(--black);color:#fff}
+.btn-dark:hover{background:#000}
+.btn-outline{background:#fff;color:var(--ink);border-color:var(--line)}
+.btn-outline:hover{border-color:var(--blue);color:var(--blue)}
+.hero{position:relative;overflow:hidden;color:#fff;background:radial-gradient(1200px 500px at 80% -10%,rgba(59,130,246,.35),transparent 60%),radial-gradient(700px 400px at 0% 20%,rgba(37,99,235,.35),transparent 60%),linear-gradient(180deg,#0b0b0f,#0b1224);}
+.hero-inner{padding:96px 0 110px;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.35);color:#bfdbfe;font-size:.8rem;font-weight:600;letter-spacing:.4px;text-transform:uppercase;}
+.hero h1{font-size:clamp(2rem,4vw,3.4rem);line-height:1.1;margin:18px 0 16px;font-weight:800;letter-spacing:-.02em}
+.hero h1 span{background:linear-gradient(90deg,#93c5fd,#60a5fa);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:#c7d0e0;font-size:1.06rem;max-width:56ch}
+.hero-actions{margin-top:26px;display:flex;flex-wrap:wrap;gap:12px}
+.hero-stats{display:flex;gap:28px;margin-top:36px;flex-wrap:wrap}
+.hero-stats div{border-left:2px solid rgba(255,255,255,.15);padding-left:14px}
+.hero-stats b{display:block;font-size:1.4rem;color:#fff}
+.hero-stats span{color:#94a3b8;font-size:.85rem}
+.hero-card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:22px;box-shadow:0 30px 60px rgba(0,0,0,.35);}
+.hero-card h4{color:#fff;margin-bottom:12px;font-size:1rem;display:flex;align-items:center;gap:8px}
+.hero-card ul{list-style:none;display:grid;gap:10px}
+.hero-card li{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.04);color:#d7deea;font-size:.92rem}
+.hero-card li i{color:#60a5fa}
+.pulse{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}70%{box-shadow:0 0 0 12px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+section{padding:80px 0}
+.section-head{text-align:center;max-width:720px;margin:0 auto 44px}
+.section-head .eyebrow{background:rgba(37,99,235,.08);border-color:rgba(37,99,235,.2);color:var(--blue)}
+.section-head h2{font-size:clamp(1.6rem,2.4vw,2.2rem);margin:14px 0 10px;letter-spacing:-.02em}
+.section-head p{color:var(--muted)}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.feature{background:var(--card);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);border:1px solid var(--line);transition:.25s ease;}
+.feature:hover{transform:translateY(-4px);border-color:rgba(37,99,235,.35);box-shadow:0 20px 40px rgba(37,99,235,.12)}
+.feature-icon{width:52px;height:52px;border-radius:12px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--blue),var(--blue-light));margin-bottom:16px;box-shadow:0 8px 20px rgba(37,99,235,.35);}
+.feature h3{font-size:1.15rem;margin-bottom:8px}
+.feature p{color:var(--muted);font-size:.95rem}
+.cta{background:linear-gradient(135deg,#0b0b0f,#0b1224);color:#fff;border-radius:20px;padding:44px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;border:1px solid rgba(255,255,255,.08);}
+.cta h3{font-size:1.4rem;margin-bottom:6px}
+.cta p{color:#a9b3c6}
+footer{background:#0b0b0f;color:#a9b3c6;padding:44px 0 20px;margin-top:40px}
+.foot{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:32px}
+.foot h5{color:#fff;font-size:.95rem;margin-bottom:12px;letter-spacing:.4px;text-transform:uppercase}
+.foot a{display:block;padding:5px 0;color:#a9b3c6;cursor:pointer}
+.foot a:hover{color:#fff}
+.copy{border-top:1px solid rgba(255,255,255,.08);margin-top:28px;padding-top:16px;text-align:center;font-size:.85rem;color:#7b869b}
+.page-header{background:linear-gradient(135deg,#0b0b0f,#0b1224);color:#fff;padding:64px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.page-header h1{font-size:clamp(1.8rem,3vw,2.5rem);letter-spacing:-.02em}
+.page-header p{color:#b6c0d3;margin-top:8px;max-width:60ch}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--line);padding:28px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-size:.88rem;font-weight:600;color:#374151}
+.form-group label i{color:var(--blue);margin-right:6px}
+.form-group input,.form-group select,.form-group textarea{padding:12px 14px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink);transition:.2s;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.12);}
+.form-group textarea{resize:vertical;min-height:130px}
+.form-actions{display:flex;gap:12px;margin-top:8px}
+.success{display:none;margin-top:20px;padding:16px 18px;border-radius:12px;background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;align-items:center;gap:12px;}
+.success.show{display:flex;animation:fade .5s ease}
+.success i{font-size:1.3rem;color:#059669}
+.table-toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.table-toolbar .search{flex:1;min-width:220px;position:relative}
+.table-toolbar .search i{position:absolute;top:50%;left:14px;transform:translateY(-50%);color:var(--muted)}
+.table-toolbar .search input{width:100%;padding:12px 14px 12px 40px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.table-toolbar select{padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;min-width:180px}
+.table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--line);background:#fff;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;min-width:720px}
+thead{background:#f9fafb}
+th{text-align:left;padding:14px 16px;font-size:.8rem;text-transform:uppercase;letter-spacing:.5px;color:#4b5563;border-bottom:1px solid var(--line)}
+td{padding:14px 16px;border-bottom:1px solid var(--line);font-size:.94rem;color:#1f2937}
+tbody tr:hover{background:#f8fafc}
+tbody tr:last-child td{border-bottom:0}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:.75rem;font-weight:600}
+.badge.pending{background:#fef3c7;color:#92400e}
+.badge.review{background:#dbeafe;color:#1e40af}
+.badge.resolved{background:#d1fae5;color:#065f46}
+.badge.open{background:#fee2e2;color:#991b1b}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.list-check{list-style:none;display:grid;gap:10px}
+.list-check li{display:flex;gap:10px;align-items:flex-start;color:#374151}
+.list-check li i{color:var(--blue);margin-top:4px}
+.contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:22px}
+.info-item{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px dashed var(--line)}
+.info-item:last-child{border-bottom:0}
+.info-icon{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;flex-shrink:0;background:rgba(37,99,235,.1);color:var(--blue);}
+.info-item b{display:block;color:var(--ink);margin-bottom:2px}
+.info-item span{color:var(--muted);font-size:.93rem}
+.emergency{background:linear-gradient(135deg,#111827,#1f2937);color:#fff;border-radius:var(--radius);padding:20px;display:flex;gap:14px;align-items:center;margin-bottom:16px;}
+.emergency i{font-size:1.6rem;color:#f87171}
+.emergency b{display:block;color:#fff}
+.emergency span{color:#cbd5e1;font-size:.9rem}
+.emergency .num{margin-left:auto;font-size:1.4rem;font-weight:700;color:#fff}
+.fade-in{opacity:0;transform:translateY(14px);animation:fade .8s ease forwards}
+.fade-in.d1{animation-delay:.1s}.fade-in.d2{animation-delay:.2s}.fade-in.d3{animation-delay:.3s}
+@keyframes fade{to{opacity:1;transform:translateY(0)}}
+.page{display:none}
+.page.active{display:block}
+@media (max-width:900px){.hero-inner{grid-template-columns:1fr;padding:64px 0 72px}.features{grid-template-columns:1fr 1fr}.grid-2,.contact-grid,.form-grid{grid-template-columns:1fr}.foot{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){.features{grid-template-columns:1fr}.foot{grid-template-columns:1fr}.hamburger{display:block}.nav-links{position:absolute;top:68px;right:0;left:0;background:#0b0b0f;flex-direction:column;align-items:stretch;padding:12px;gap:4px;border-bottom:1px solid rgba(255,255,255,.08);display:none;}.nav-links.open{display:flex}.nav-cta{margin:6px 0 0 0}section{padding:56px 0}.cta{padding:28px}}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" data-nav="home">
+      <span class="brand-badge"><i class="fa-solid fa-shield-halved"></i></span>
+      <span class="brand-name">SIM<span>.</span></span>
+    </a>
+    <button class="hamburger" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    <nav class="nav-links">
+      <a data-nav="home">Home</a>
+      <a data-nav="report">Report</a>
+      <a data-nav="reports">Reports</a>
+      <a data-nav="about">About</a>
+      <a data-nav="contact">Contact</a>
+      <a data-nav="report" class="btn btn-primary nav-cta"><i class="fa-solid fa-triangle-exclamation"></i> Report Incident</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- HOME -->
+  <div class="page" data-page="home">
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="fade-in">
+          <span class="eyebrow"><i class="fa-solid fa-satellite-dish"></i> Real-time campus safety</span>
+          <h1>Map, report, and prevent <span>security incidents</span> across campus.</h1>
+          <p>SIM is a Security Incident Mapping System that empowers students, staff, and landlords to report incidents quickly, visualize risk zones, and keep the community informed.</p>
+          <div class="hero-actions">
+            <a data-nav="report" class="btn btn-primary"><i class="fa-solid fa-triangle-exclamation"></i> Report an Incident</a>
+            <a data-nav="reports" class="btn btn-ghost"><i class="fa-solid fa-chart-line"></i> View Reports</a>
+          </div>
+          <div class="hero-stats">
+            <div><b>24/7</b><span>Monitoring</span></div>
+            <div><b>3</b><span>User roles</span></div>
+            <div><b>5+</b><span>Incident types</span></div>
+          </div>
+        </div>
+        <div class="hero-card fade-in d2">
+          <h4><span class="pulse"></span> Live activity feed</h4>
+          <ul>
+            <li><i class="fa-solid fa-location-dot"></i> Theft reported near Library Block A</li>
+            <li><i class="fa-solid fa-user-shield"></i> Patrol dispatched to Hostel 3</li>
+            <li><i class="fa-solid fa-circle-check"></i> Vandalism case resolved</li>
+            <li><i class="fa-solid fa-bell"></i> Harassment report under review</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="container">
+        <div class="section-head fade-in">
+          <span class="eyebrow">What SIM offers</span>
+          <h2>A safer campus, powered by data</h2>
+          <p>Three core capabilities designed to make reporting simple, transparent, and actionable.</p>
+        </div>
+        <div class="features">
+          <div class="feature fade-in d1"><div class="feature-icon"><i class="fa-solid fa-triangle-exclamation"></i></div><h3>Report Security Incidents</h3><p>Submit incident details in seconds using a guided form designed for students, staff, and landlords.</p></div>
+          <div class="feature fade-in d2"><div class="feature-icon"><i class="fa-solid fa-map-location-dot"></i></div><h3>View Incident Reports</h3><p>Browse an organized dashboard of recent incidents, statuses, and locations across campus.</p></div>
+          <div class="feature fade-in d3"><div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div><h3>Promote Campus Safety</h3><p>Awareness, transparency, and rapid response together build a safer environment for everyone.</p></div>
+        </div>
+      </div>
+    </section>
+    <section style="padding-top:0">
+      <div class="container">
+        <div class="cta fade-in">
+          <div><h3>See something? Report it in under a minute.</h3><p>Every report helps our security team map risks and act faster.</p></div>
+          <a data-nav="report" class="btn btn-primary"><i class="fa-solid fa-arrow-right"></i> Report Incident</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- REPORT -->
+  <div class="page" data-page="report">
+    <section class="page-header">
+      <div class="container fade-in">
+        <span class="eyebrow"><i class="fa-solid fa-triangle-exclamation"></i> New report</span>
+        <h1 style="margin-top:12px">Report a Security Incident</h1>
+        <p>Provide as much detail as you can. This is a prototype form — no data is stored.</p>
+      </div>
+    </section>
+    <section>
+      <div class="container">
+        <div class="card fade-in" style="max-width:900px;margin:0 auto">
+          <form id="reportForm" novalidate>
+            <div class="form-grid">
+              <div class="form-group"><label><i class="fa-solid fa-user"></i> Full Name</label><input type="text" placeholder="Jane Doe" required/></div>
+              <div class="form-group"><label><i class="fa-solid fa-id-badge"></i> User Type</label><select required><option value="">Select role</option><option>Student</option><option>Staff</option><option>Landlord</option></select></div>
+              <div class="form-group"><label><i class="fa-solid fa-triangle-exclamation"></i> Incident Type</label><select required><option value="">Select type</option><option>Theft</option><option>Assault</option><option>Vandalism</option><option>Harassment</option><option>Other</option></select></div>
+              <div class="form-group"><label><i class="fa-solid fa-location-dot"></i> Location</label><input type="text" placeholder="e.g. Library Block A" required/></div>
+              <div class="form-group"><label><i class="fa-solid fa-calendar-days"></i> Date</label><input type="date" required/></div>
+              <div class="form-group"><label><i class="fa-solid fa-clock"></i> Time (optional)</label><input type="time"/></div>
+              <div class="form-group full"><label><i class="fa-solid fa-align-left"></i> Description</label><textarea placeholder="Describe what happened, who was involved, and any relevant details…" required></textarea></div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Submit Report</button>
+              <button type="reset" class="btn btn-outline"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+            </div>
+            <div id="successMsg" class="success" role="status">
+              <i class="fa-solid fa-circle-check"></i>
+              <div><b>Report submitted successfully.</b><br/><span style="color:#065f46">Thank you — the security team will review this incident shortly. (Demo only — no data saved.)</span></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- REPORTS -->
+  <div class="page" data-page="reports">
+    <section class="page-header">
+      <div class="container fade-in">
+        <span class="eyebrow"><i class="fa-solid fa-table-list"></i> Dashboard</span>
+        <h1 style="margin-top:12px">Incident Reports</h1>
+        <p>A sample view of recent reports submitted to the SIM system.</p>
+      </div>
+    </section>
+    <section>
+      <div class="container fade-in">
+        <div class="table-toolbar">
+          <div class="search"><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="Search by reporter, location, or incident…"/></div>
+          <select><option>All incident types</option><option>Theft</option><option>Assault</option><option>Vandalism</option><option>Harassment</option><option>Other</option></select>
+          <select><option>All statuses</option><option>Open</option><option>Under Review</option><option>Pending</option><option>Resolved</option></select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Reporter</th><th>User Type</th><th>Incident</th><th>Location</th><th>Date</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Aisha Khan</td><td>Student</td><td>Theft</td><td>Library Block A</td><td>2026-06-24</td><td><span class="badge review"><i class="fa-solid fa-eye"></i> Under Review</span></td></tr>
+              <tr><td>Michael Chen</td><td>Staff</td><td>Vandalism</td><td>Engineering Building</td><td>2026-06-22</td><td><span class="badge resolved"><i class="fa-solid fa-check"></i> Resolved</span></td></tr>
+              <tr><td>Rita Alvarez</td><td>Landlord</td><td>Harassment</td><td>Off-Campus Housing 12</td><td>2026-06-20</td><td><span class="badge pending"><i class="fa-solid fa-hourglass-half"></i> Pending</span></td></tr>
+              <tr><td>David Owusu</td><td>Student</td><td>Assault</td><td>Sports Complex</td><td>2026-06-18</td><td><span class="badge open"><i class="fa-solid fa-circle-exclamation"></i> Open</span></td></tr>
+              <tr><td>Sarah Lin</td><td>Staff</td><td>Other</td><td>Parking Lot B</td><td>2026-06-15</td><td><span class="badge resolved"><i class="fa-solid fa-check"></i> Resolved</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="page" data-page="about">
+    <section class="page-header">
+      <div class="container fade-in">
+        <span class="eyebrow"><i class="fa-solid fa-circle-info"></i> About</span>
+        <h1 style="margin-top:12px">About the SIM Project</h1>
+        <p>An academic prototype exploring how technology can improve campus security through community reporting and data visualization.</p>
+      </div>
+    </section>
+    <section>
+      <div class="container">
+        <div class="card fade-in" style="margin-bottom:22px">
+          <h3 style="margin-bottom:8px"><i class="fa-solid fa-shield-halved" style="color:var(--blue)"></i> Introduction</h3>
+          <p style="color:#374151">The <strong>Security Incident Mapping System (SIM)</strong> is a university project designed to help campuses collect, visualize, and respond to security incidents. It brings students, staff, and landlords together on a single platform where reporting is fast, transparent, and easy to understand.</p>
+        </div>
+        <div class="grid-2">
+          <div class="card fade-in d1"><h3 style="margin-bottom:12px"><i class="fa-solid fa-bullseye" style="color:var(--blue)"></i> Objectives</h3>
+            <ul class="list-check">
+              <li><i class="fa-solid fa-check"></i> Provide a simple way to report campus incidents.</li>
+              <li><i class="fa-solid fa-check"></i> Map incident locations to identify risk hotspots.</li>
+              <li><i class="fa-solid fa-check"></i> Improve response coordination for security teams.</li>
+              <li><i class="fa-solid fa-check"></i> Increase transparency and awareness across campus.</li>
+            </ul>
+          </div>
+          <div class="card fade-in d2"><h3 style="margin-bottom:12px"><i class="fa-solid fa-star" style="color:var(--blue)"></i> Benefits</h3>
+            <ul class="list-check">
+              <li><i class="fa-solid fa-check"></i> Faster response to emerging incidents.</li>
+              <li><i class="fa-solid fa-check"></i> Data-driven decisions for patrol planning.</li>
+              <li><i class="fa-solid fa-check"></i> Empowered community with accessible reporting.</li>
+              <li><i class="fa-solid fa-check"></i> Better collaboration between roles and stakeholders.</li>
+            </ul>
+          </div>
+          <div class="card fade-in d2"><h3 style="margin-bottom:12px"><i class="fa-solid fa-users" style="color:var(--blue)"></i> Intended Users</h3>
+            <ul class="list-check">
+              <li><i class="fa-solid fa-user-graduate"></i> <strong>Students</strong> — report incidents on and around campus.</li>
+              <li><i class="fa-solid fa-user-tie"></i> <strong>Staff</strong> — monitor activity and coordinate responses.</li>
+              <li><i class="fa-solid fa-house-user"></i> <strong>Landlords</strong> — flag issues affecting student housing.</li>
+            </ul>
+          </div>
+          <div class="card fade-in d3"><h3 style="margin-bottom:12px"><i class="fa-solid fa-shield-heart" style="color:var(--blue)"></i> Why It Matters</h3>
+            <p style="color:#374151">Improving campus security is a shared responsibility. SIM demonstrates how a lightweight digital tool can encourage reporting, reduce blind spots, and build a culture of safety — laying the foundation for smarter, safer academic environments.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="page" data-page="contact">
+    <section class="page-header">
+      <div class="container fade-in">
+        <span class="eyebrow"><i class="fa-solid fa-headset"></i> Get in touch</span>
+        <h1 style="margin-top:12px">Contact & Emergency</h1>
+        <p>Reach the Security Office directly, or use the emergency numbers below in urgent situations.</p>
+      </div>
+    </section>
+    <section>
+      <div class="container contact-grid">
+        <div class="fade-in">
+          <div class="emergency"><i class="fa-solid fa-triangle-exclamation"></i><div><b>Campus Emergency</b><span>24/7 rapid response line</span></div><span class="num">911</span></div>
+          <div class="emergency"><i class="fa-solid fa-shield-halved"></i><div><b>Security Hotline</b><span>Non-emergency incidents</span></div><span class="num">+1 (555) 010-1234</span></div>
+          <div class="card">
+            <h3 style="margin-bottom:8px"><i class="fa-solid fa-building-shield" style="color:var(--blue)"></i> Security Office</h3>
+            <div class="info-item"><div class="info-icon"><i class="fa-solid fa-location-dot"></i></div><div><b>Address</b><span>Main Campus, Building C, Ground Floor</span></div></div>
+            <div class="info-item"><div class="info-icon"><i class="fa-solid fa-envelope"></i></div><div><b>Email</b><span>security@sim.edu</span></div></div>
+            <div class="info-item"><div class="info-icon"><i class="fa-solid fa-clock"></i></div><div><b>Office Hours</b><span>Mon–Fri, 08:00 – 18:00</span></div></div>
+          </div>
+        </div>
+        <div class="card fade-in d1">
+          <h3 style="margin-bottom:12px"><i class="fa-solid fa-paper-plane" style="color:var(--blue)"></i> Send us a message</h3>
+          <form id="contactForm" novalidate>
+            <div class="form-grid">
+              <div class="form-group"><label><i class="fa-solid fa-user"></i> Full Name</label><input type="text" placeholder="Your name" required/></div>
+              <div class="form-group"><label><i class="fa-solid fa-envelope"></i> Email</label><input type="email" placeholder="you@example.com" required/></div>
+              <div class="form-group full"><label><i class="fa-solid fa-tag"></i> Subject</label><input type="text" placeholder="How can we help?" required/></div>
+              <div class="form-group full"><label><i class="fa-solid fa-align-left"></i> Message</label><textarea placeholder="Write your message…" required></textarea></div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
+              <button type="reset" class="btn btn-outline"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+            </div>
+            <div id="contactSuccess" class="success" role="status">
+              <i class="fa-solid fa-circle-check"></i>
+              <div><b>Message sent.</b><br/><span style="color:#065f46">Thanks for reaching out — this is a demo form, no data was stored.</span></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="container foot">
+    <div>
+      <div class="brand" style="color:#fff"><span class="brand-badge"><i class="fa-solid fa-shield-halved"></i></span><span class="brand-name">SIM<span>.</span></span></div>
+      <p style="margin-top:12px;max-width:40ch">Security Incident Mapping System — a university project focused on improving campus safety through data and community reporting.</p>
+    </div>
+    <div>
+      <h5>Navigation</h5>
+      <a data-nav="home">Home</a>
+      <a data-nav="report">Report</a>
+      <a data-nav="reports">Reports</a>
+      <a data-nav="about">About</a>
+      <a data-nav="contact">Contact</a>
+    </div>
+    <div>
+      <h5>Contact</h5>
+      <a data-nav="contact"><i class="fa-solid fa-phone"></i> +1 (555) 010-1234</a>
+      <a data-nav="contact"><i class="fa-solid fa-envelope"></i> security@sim.edu</a>
+      <a data-nav="contact"><i class="fa-solid fa-location-dot"></i> Campus Security Office</a>
+    </div>
+  </div>
+  <div class="container copy">© 2026 SIM — Security Incident Mapping System. Built for academic demonstration.</div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const burger = document.querySelector('.hamburger');
+  const links = document.querySelector('.nav-links');
+  if (burger && links) burger.addEventListener('click', () => links.classList.toggle('open'));
+
+  const pages = document.querySelectorAll('.page');
+  const navLinks = document.querySelectorAll('.nav-links a[data-nav]');
+
+  function showPage(name){
+    if(!document.querySelector(`.page[data-page="${name}"]`)) name = 'home';
+    pages.forEach(p => p.classList.toggle('active', p.dataset.page === name));
+    navLinks.forEach(a => {
+      if(a.classList.contains('nav-cta')) return;
+      a.classList.toggle('active', a.dataset.nav === name);
+    });
+    if (location.hash.replace('#','') !== name) history.replaceState(null,'','#'+name);
+    window.scrollTo({top:0,behavior:'instant'});
+    links.classList.remove('open');
+  }
+
+  document.querySelectorAll('[data-nav]').forEach(el => {
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', e => { e.preventDefault(); showPage(el.dataset.nav); });
+  });
+
+  window.addEventListener('hashchange', () => showPage(location.hash.replace('#','') || 'home'));
+  showPage(location.hash.replace('#','') || 'home');
+
+  const form = document.getElementById('reportForm');
+  if (form) form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const box = document.getElementById('successMsg');
+    box.classList.add('show'); form.reset();
+    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => box.classList.remove('show'), 6000);
+  });
+
+  const contact = document.getElementById('contactForm');
+  if (contact) contact.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const box = document.getElementById('contactSuccess');
+    if (box) { box.classList.add('show'); contact.reset(); setTimeout(() => box.classList.remove('show'), 6000); }
+  });
+});
+</script>
+</body>
+    </html>
